@@ -9,7 +9,8 @@ const runSearch = (text, tracks) => {
   if (text.trim().length === 0) return tracks;
 
   const foundTracks = tracks.filter(({ title, artists }) => {
-    return title.includes(text) || artists.includes(text)
+    return title.toLowerCase().includes(text.toLowerCase()) 
+    || artists.toLowerCase().includes(text.toLowerCase())
   })
 
   return foundTracks
@@ -17,6 +18,11 @@ const runSearch = (text, tracks) => {
 
 const MainPage = () => {
   const [data, setData] = useState([])
+  const [inputValue, setInputValue] = useState("")
+
+  const onChange = ({ target }) =>{
+    setInputValue(target.value)
+  }
 
   useEffect(() => {
     const getMusic = async () => {
@@ -34,7 +40,7 @@ const MainPage = () => {
 
   return (
     <div className='search'>
-      <Input className='input' placeholder='Поиск треков' />
+      <Input onChange={onChange} className='input' placeholder='Поиск треков' />
       <div className='list'>
         {runSearch("", data).map(mp3 => <Tracks key={mp3.id} {...mp3} />)}
       </div>
